@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import requests
 import pandas as pd
@@ -27,22 +28,16 @@ HEADERS = {
 # Function
 # =========================
 def fetch_bitcoin_prices(
-    start_date: str | None = None,
-    end_date: str | None = None,
-    output_csv: str = "btc_price.csv",
-    sleep_sec: float = 1.1
+    start_date: str,
+    end_date: str,
+    output_csv: str,
+    sleep_sec: float = 1.2
 ):
     """
-    Tarik harga BTC harian dari CoinMarketCap (AMAN)
-    - start_date None → dari 2010-01-01
-    - end_date None → sampai hari ini
+    Tarik harga BTC harian dari CoinMarketCap (YEARLY SAFE)
+
+    start_date & end_date WAJIB diisi (YYYY-MM-DD)
     """
-
-    if not start_date:
-        start_date = "2010-01-01"
-
-    if not end_date:
-        end_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     print(f"📥 Tarik BTC dari {start_date} sampai {end_date}")
 
@@ -60,7 +55,10 @@ def fetch_bitcoin_prices(
         params=params,
         timeout=30
     )
-    r.raise_for_status()
+
+    if r.status_code != 200:
+        print("❌ ERROR:", r.json())
+        r.raise_for_status()
 
     data = r.json()["data"]["quotes"]
 
@@ -68,31 +66,52 @@ def fetch_bitcoin_prices(
     for q in data:
         rows.append({
             "date": q["timestamp"][:10],
-            "price_usd": q["quote"]["USD"]["close"],
-            "market_cap": q["quote"]["USD"]["market_cap"],
-            "volume": q["quote"]["USD"]["volume"]
+            "open": q["quote"]["USD"]["open"],
+            "high": q["quote"]["USD"]["high"],
+            "low": q["quote"]["USD"]["low"],
+            "close": q["quote"]["USD"]["close"],
+            "volume": q["quote"]["USD"]["volume"],
+            "market_cap": q["quote"]["USD"]["market_cap"]
         })
 
     df = pd.DataFrame(rows)
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values("date")
 
+    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
     df.to_csv(output_csv, index=False)
 
-    print(f"✅ Selesai | {len(df)} baris")
-    print(f"📄 File  : {output_csv}")
-    print(f"📅 Range : {df['date'].min().date()} → {df['date'].max().date()}")
+    print(f"✅ Selesai | {len(df)} baris → {output_csv}")
 
     time.sleep(sleep_sec)
     return df
 
 
 # =========================
-# CLI
+# CLI ENTRYPOINT
 # =========================
 if __name__ == "__main__":
+
+    # CLI usage:
+    # python get_from_cmc.py 2024-01-01 2024-12-31
+
+    if len(sys.argv) != 3:
+        raise ValueError(
+            "❌ Format salah.\n"
+            "Gunakan:\n"
+            "python get_from_cmc.py YYYY-MM-DD YYYY-MM-DD\n\n"
+            "Contoh:\n"
+            "python get_from_cmc.py 2024-01-01 2024-12-31"
+        )
+
+    start_date = sys.argv[1]
+    end_date = sys.argv[2]
+
+    year = start_date[:4]
+    output_csv = f"data/btc/btc_{year}.csv"
+
     fetch_bitcoin_prices(
-        start_date=None,
-        end_date=None,
-        output_csv="data/btc_price.csv"
+        start_date=start_date,
+        end_date=end_date,
+        output_csv=output_csv
     )
