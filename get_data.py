@@ -34,12 +34,12 @@ def fetch_btc_historical(start_date, end_date, output_csv):
 
 if __name__ == "__main__":
     # CLI usage:
-    # python get_btc_historical_yf.py 2015-01-01 2025-12-19 data/btc/btc_2015_2025.csv
+    # python get_data.py 2014-09-17 2025-12-19 data/btc/btc_2015_2025.csv
 
     if len(sys.argv) != 4:
         raise ValueError(
             "Gunakan:\n"
-            "python get_btc_historical_yf.py START_DATE END_DATE OUTPUT_CSV"
+            "python get_data.py START_DATE END_DATE OUTPUT_CSV"
         )
 
     start_date = sys.argv[1]
