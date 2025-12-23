@@ -34,7 +34,7 @@ def fetch_btc_historical(start_date, end_date, output_csv):
 
 if __name__ == "__main__":
     # CLI usage:
-    # python get_data.py 2014-09-17 2025-12-19 data/btc/btc_2015_2025.csv
+    # python get_data.py 2014-09-17 2025-12-19 Datasets/btc_2014_2025.csv
 
     if len(sys.argv) != 4:
         raise ValueError(
