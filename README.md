@@ -1,93 +1,108 @@
-# 📈 Bitcoin (BTC) Monthly Price Forecasting  
-**Time-Series Forecasting Project | TDSP Framework**
+# 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting
 
-## 📌 Project Overview
-Bitcoin merupakan aset kripto dengan volatilitas tinggi yang dipengaruhi oleh sentimen pasar, regulasi global, dan kondisi makroekonomi. Proyek ini bertujuan membangun **baseline forecasting model** untuk memprediksi harga Bitcoin bulanan menggunakan pendekatan *time-series* klasik dan modern.
+## Project Structure
 
-Framework yang digunakan adalah **Microsoft Team Data Science Process (TDSP)** untuk memastikan alur analisis terstruktur dari bisnis hingga evaluasi model.
+| Path | Description |
+|------|-------------|
+| `.gitignore` | Konfigurasi file dan folder yang dikecualikan dari Git |
+| `README.md` | Dokumentasi utama proyek |
+| `Codes/` | Script Python pendukung |
+| `Codes/get_data.py` | Script untuk pengambilan / persiapan data Bitcoin |
+| `Datasets/` | Folder penyimpanan dataset |
+| `Datasets/btc_2014_2025.csv` | Dataset harga Bitcoin harian (OHLCV) dari Yahoo Finance |
+| `Notebooks/` | Jupyter Notebook untuk analisis dan modeling |
+| `Notebooks/notebook.ipynb` | Notebook utama: EDA, modeling, evaluasi, dan visualisasi |
+| `Environments/` | Konfigurasi environment |
+| `Environments/environment.yml` | File environment Conda untuk replikasi setup |
+| `lst.txt` | File tambahan (log / catatan internal) |
 
----
 
-## 🎯 Business Objective
-- Memprediksi **harga penutupan Bitcoin bulanan** menggunakan data historis (2014–2025)
-- Menguji efektivitas model:
-  - ARIMA
-  - SARIMA
-  - Prophet
-- Menentukan model terbaik berdasarkan **RMSE**
 
----
+## Overview
+Proyek ini bertujuan untuk memprediksi **harga Bitcoin bulanan** menggunakan pendekatan *time-series forecasting*. Fokus utama proyek adalah mengevaluasi efektivitas model klasik dan modern dalam menangani data dengan **volatilitas tinggi**, seperti Bitcoin.
 
-## 🗂 Dataset
-- **Source:** Historical Bitcoin OHLCV Data
-- **Granularity:** Harian → Bulanan
-- **Target Variable:** Monthly Average Close Price
-- **Period:** 2014 – 2025
+Pendekatan yang digunakan mengikuti kerangka kerja **Microsoft Team Data Science Process (TDSP)**, mulai dari pemahaman bisnis hingga evaluasi model.
 
----
+## Business Problem
+Bitcoin memiliki pergerakan harga yang sangat fluktuatif dan dipengaruhi oleh banyak faktor eksternal. Stakeholder ingin mengetahui:
+- Apakah data historis harga Bitcoin dapat digunakan untuk memprediksi harga di masa depan?
+- Model *time-series* mana yang paling efektif untuk menangkap tren harga Bitcoin bulanan?
+- Seberapa besar tingkat kesalahan prediksi yang dihasilkan oleh masing-masing model?
 
-## 🔍 Analytic Approach
-1. **Data Transformation**
-   - Resampling harga harian menjadi **rata-rata bulanan (Monthly Start – MS)**
-2. **Exploratory Data Analysis**
-   - Visualisasi tren jangka panjang
-   - Uji stasioneritas (ADF Test)
-3. **Modeling**
-   - ARIMA (1,1,1)
-   - SARIMA (1,1,1)(1,1,1,12)
-   - Prophet (multiplicative seasonality)
-4. **Evaluation Metric**
-   - Root Mean Squared Error (RMSE)
-5. **Forecast Horizon**
-   - 24 bulan (2 tahun)
+## Objectives
+- Mengubah data harga Bitcoin harian menjadi data **bulanan** untuk mengurangi *noise*.
+- Memprediksi harga Bitcoin untuk **24 bulan ke depan**.
+- Membandingkan performa beberapa model *time-series*.
+- Menentukan model terbaik berdasarkan metrik evaluasi kuantitatif.
 
----
+## Dataset
+- **Sumber**: Yahoo Finance  
+- **Periode**: September 2014 – Desember 2025  
+- **Frekuensi awal**: Harian (OHLCV)  
+- **Kolom utama yang digunakan**: `close` (harga penutupan)
 
-## 🧠 Modeling Results
-| Model    | Description                                  |
-|---------|----------------------------------------------|
-| ARIMA   | Baseline time-series model                   |
-| SARIMA  | ARIMA dengan komponen musiman tahunan        |
-| Prophet | Model modern dengan changepoint detection   |
+Data harian di-*resample* menjadi **rata-rata bulanan** untuk meningkatkan stabilitas model dan memudahkan analisis tren jangka menengah.
 
-👉 **Model terbaik dipilih otomatis berdasarkan RMSE terendah**
+## Methodology (TDSP)
 
----
+### 1. Business Understanding
+Memahami karakteristik Bitcoin sebagai aset dengan volatilitas tinggi dan menentukan tujuan prediksi berbasis kebutuhan bisnis.
 
-## 📊 Key Insights
-- Data bulanan memberikan tren yang lebih stabil dibandingkan data harian
-- Model mampu menangkap **arah tren jangka panjang**, namun:
-  - Tidak menangkap faktor eksternal seperti berita & regulasi
-  - Tidak cocok untuk *short-term trading*
+### 2. Data Acquisition & Understanding
+- Memuat dan memvalidasi dataset (tidak ada missing value dan duplikasi).
+- Resampling data harian menjadi bulanan.
+- Visualisasi tren harga Bitcoin.
+- Uji stasioneritas menggunakan **ADF Test**.
 
----
+### 3. Modeling
+Data dibagi menjadi:
+- **Training set**: September 2014 – Desember 2023  
+- **Test set**: Januari 2024 – Desember 2025  
 
-## ⚠️ Risk & Limitation
-- Bitcoin sangat dipengaruhi faktor non-historis
-- Forecast **tidak boleh dianggap sebagai harga pasti**
-- Digunakan sebagai:
-  - Strategic insight
-  - Trend projection
-  - Decision support
+Model yang digunakan:
+- **ARIMA (1,1,1)** – sebagai *baseline*
+- **SARIMA (1,1,1)(1,1,1,12)** – menambahkan pola musiman tahunan
+- **Prophet** – model modern yang menangani tren non-linear dan *changepoints*
 
----
+### 4. Evaluation
+Evaluasi dilakukan menggunakan **RMSE (Root Mean Squared Error)**.
 
-## ✅ Conclusion
-Pendekatan *time-series forecasting* pada data bulanan Bitcoin efektif sebagai **baseline model** untuk proyeksi tren jangka panjang. Model ini dapat dikembangkan lebih lanjut dengan:
-- Exogenous variables (macro indicators, sentiment index)
-- AutoARIMA tuning
-- Hybrid ML / Deep Learning models
+| Model   | RMSE (USD) |
+|--------|------------|
+| SARIMA | ~36,071 |
+| ARIMA | ~44,035 |
+| Prophet | ~47,793 |
 
----
+Model **SARIMA** menunjukkan performa terbaik dan dipilih sebagai model final.
 
-## 🛠 Tech Stack
-- Python
-- Pandas, NumPy
-- Statsmodels
+### 5. Deployment & Acceptance
+Hasil prediksi divisualisasikan dengan membandingkan harga aktual dan hasil prediksi SARIMA pada periode uji untuk mendukung interpretasi bisnis.
+
+## Key Findings
+- Data Bitcoin bulanan masih menunjukkan **pola musiman tahunan**.
+- Model klasik (SARIMA) mampu mengungguli model modern (Prophet) pada kasus ini.
+- Prediksi lebih efektif untuk **melihat arah tren**, bukan untuk memprediksi lonjakan harga ekstrem.
+
+## Limitations
+- Model hanya menggunakan data historis harga tanpa faktor eksternal (berita, regulasi, sentimen).
+- Prediksi bersifat halus dan tidak menangkap volatilitas ekstrem.
+- Tidak cocok untuk *trading* jangka pendek atau harian.
+- Parameter model belum dioptimalkan sepenuhnya (belum menggunakan AutoARIMA).
+
+## Recommendations
+- Gunakan hasil prediksi sebagai **indikator tren**, bukan harga pasti.
+- Tambahkan variabel eksternal untuk meningkatkan akurasi.
+- Lakukan optimasi parameter model.
+- Eksplor pendekatan **hybrid** (time-series + machine learning).
+- Sesuaikan horizon prediksi dengan kebutuhan analisis strategis.
+
+## Tools & Libraries
+- Python (pandas, numpy)
+- statsmodels
 - Prophet
-- Plotly, Matplotlib, Seaborn
-- Scikit-learn
+- scikit-learn
+- Plotly
 
----
-
-## 📁 Project Structure
+## Author
+**Hans Darmawan**  
+Data Science & Analytics  
