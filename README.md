@@ -1,4 +1,5 @@
 # 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting
+by Hans Darmawan
 
 ## Project Structure
 
@@ -102,7 +103,3 @@ Hasil prediksi divisualisasikan dengan membandingkan harga aktual dan hasil pred
 - Prophet
 - scikit-learn
 - Plotly
-
-## Author
-**Hans Darmawan**  
-Data Science & Analytics  
