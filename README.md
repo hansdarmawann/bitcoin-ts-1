@@ -1,8 +1,6 @@
 # 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting  
 **by Hans Darmawan**
 
----
-
 ## 📁 Project Structure
 
 ```
@@ -25,16 +23,12 @@ bitcoin-ts-1/
 └─ README.md
 ```
 
----
-
 ## 📌 Overview
 
 Proyek ini bertujuan untuk memprediksi **harga Bitcoin bulanan** menggunakan pendekatan *time-series forecasting*. Fokus utama proyek adalah mengevaluasi seberapa efektif model *time-series* dalam menangani **aset dengan volatilitas tinggi**, seperti Bitcoin.
 
 Proyek ini dibangun secara **end-to-end**, mulai dari eksplorasi data, pemodelan, evaluasi, hingga kesiapan deployment ringan melalui **Streamlit**.  
 Pendekatan kerja mengikuti kerangka **Microsoft Team Data Science Process (TDSP)**.
-
----
 
 ## 💼 Business Problem
 
@@ -44,16 +38,12 @@ Bitcoin memiliki karakteristik harga yang sangat fluktuatif dan dipengaruhi oleh
 - Model *time-series* mana yang paling efektif untuk menangkap **tren harga bulanan** Bitcoin?
 - Seberapa besar tingkat kesalahan prediksi yang dihasilkan oleh masing-masing model?
 
----
-
 ## 🎯 Objectives
 
 - Mengubah data harga Bitcoin **harian → bulanan** untuk mengurangi *noise*
 - Memprediksi harga Bitcoin untuk **24 bulan ke depan**
 - Membandingkan performa beberapa model *time-series*
 - Menentukan model terbaik berdasarkan evaluasi kuantitatif
-
----
 
 ## 📊 Dataset
 
@@ -66,8 +56,6 @@ Data harian di-*resample* menjadi **rata-rata bulanan** untuk:
 - mengurangi fluktuasi ekstrem
 - meningkatkan stabilitas model
 - mempermudah analisis tren jangka menengah
-
----
 
 ## 🧠 Methodology (TDSP)
 
@@ -112,8 +100,6 @@ Model **SARIMA** memberikan performa terbaik dan dipilih sebagai **model final**
   - auto-load metadata yang sesuai
   - reusable di notebook, Streamlit, atau API
 
----
-
 ## 🚀 Streamlit App (Demo)
 
 Proyek ini menyediakan **aplikasi Streamlit** untuk menampilkan hasil prediksi secara interaktif.
@@ -140,15 +126,11 @@ http://localhost:8501
 
 > Catatan: Aplikasi ini ditujukan untuk **analisis arah tren**, bukan prediksi harga harian atau keputusan trading jangka pendek.
 
----
-
 ## 🔍 Key Findings
 
 * Data Bitcoin bulanan masih menunjukkan **pola musiman tahunan**
 * Model klasik (**SARIMA**) mampu mengungguli model modern (**Prophet**)
 * Prediksi lebih cocok digunakan sebagai **indikator arah tren**, bukan nilai harga absolut
-
----
 
 ## ⚠️ Limitations
 
@@ -157,8 +139,6 @@ http://localhost:8501
 * Prediksi bersifat halus dan kurang cocok untuk *short-term trading*
 * Parameter model belum dioptimasi menggunakan AutoARIMA
 
----
-
 ## 💡 Recommendations
 
 * Gunakan hasil prediksi sebagai **indikator tren**
@@ -166,8 +146,6 @@ http://localhost:8501
 * Lakukan optimasi parameter model
 * Eksplor pendekatan **hybrid** (time-series + ML)
 * Sesuaikan horizon prediksi dengan kebutuhan bisnis
-
----
 
 ## 🛠 Tools & Libraries
 
