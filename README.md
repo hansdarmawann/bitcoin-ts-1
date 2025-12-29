@@ -3,6 +3,30 @@
 
 ---
 
+## 📁 Project Structure
+
+```
+bitcoin-ts-1/
+├─ datasets/
+│  └─ btc_2014_2025.csv
+├─ environments/
+│  └─ environment.yml
+├─ models/
+│  ├─ sarima_model_YYYYMMDD_HHMMSS.joblib
+│  └─ sarima_metadata_YYYYMMDD_HHMMSS.json
+├─ notebooks/
+│  └─ notebook.ipynb
+├─ sources/
+│  ├─ get_data.py
+│  ├─ model_loader.py
+│  ├─ streamlit_app.py
+│  └─ clean_cache.py
+├─ run_streamlit.bat
+└─ README.md
+```
+
+---
+
 ## 📌 Overview
 
 Proyek ini bertujuan untuk memprediksi **harga Bitcoin bulanan** menggunakan pendekatan *time-series forecasting*. Fokus utama proyek adalah mengevaluasi seberapa efektif model *time-series* dalam menangani **aset dengan volatilitas tinggi**, seperti Bitcoin.
@@ -142,30 +166,6 @@ http://localhost:8501
 * Lakukan optimasi parameter model
 * Eksplor pendekatan **hybrid** (time-series + ML)
 * Sesuaikan horizon prediksi dengan kebutuhan bisnis
-
----
-
-## 📁 Project Structure
-
-```
-bitcoin-ts-1/
-├─ datasets/
-│  └─ btc_2014_2025.csv
-├─ environments/
-│  └─ environment.yml
-├─ models/
-│  ├─ sarima_model_YYYYMMDD_HHMMSS.joblib
-│  └─ sarima_metadata_YYYYMMDD_HHMMSS.json
-├─ notebooks/
-│  └─ notebook.ipynb
-├─ sources/
-│  ├─ get_data.py
-│  ├─ model_loader.py
-│  ├─ streamlit_app.py
-│  └─ clean_cache.py
-├─ run_streamlit.bat
-└─ README.md
-```
 
 ---
 
