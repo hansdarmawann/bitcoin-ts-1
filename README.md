@@ -1,3 +1,10 @@
+Siap 👍
+Di bawah ini adalah **versi `README.md` yang sudah di-update penuh**, **konsisten dengan struktur project terbaru**, dan **siap portfolio / reviewer**.
+Kamu bisa **langsung replace isi `README.md`** dengan konten ini.
+
+---
+
+````md
 # 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting
 **by Hans Darmawan**
 
@@ -16,13 +23,15 @@
 | `environments/environment.yml` | File Conda environment untuk replikasi setup |
 | `models/` | Artefak model terlatih |
 | `models/sarima_model_YYYYMMDD_HHMMSS.joblib` | Model SARIMA terlatih (versioned) |
-| `models/sarima_metadata_YYYYMMDD_HHMMSS.json` | Metadata model (RMSE, periode training, dll) |
+| `models/sarima_metadata_YYYYMMDD_HHMMSS.json` | Metadata model (periode training, dsb.) |
 | `notebooks/` | Jupyter Notebook untuk analisis dan modeling |
 | `notebooks/notebook.ipynb` | Notebook utama (EDA, modeling, evaluasi, visualisasi) |
 | `sources/` | Script Python reusable |
 | `sources/get_data.py` | Script pengambilan dan persiapan data |
 | `sources/model_loader.py` | Loader model (Level 2: auto-load model + metadata) |
+| `sources/streamlit_app.py` | Aplikasi Streamlit untuk visualisasi prediksi |
 | `sources/clean_cache.py` | Utility untuk membersihkan cache Python |
+| `run_streamlit.bat` | Script Windows untuk menjalankan Streamlit app |
 
 ---
 
@@ -109,38 +118,75 @@ Model **SARIMA** menunjukkan performa terbaik dan dipilih sebagai **model final*
 
 ---
 
+## 🚀 Streamlit App (Demo)
+
+Proyek ini dilengkapi dengan **aplikasi Streamlit** untuk menampilkan hasil prediksi harga Bitcoin secara interaktif.
+
+### Fitur Utama
+- Auto-load **model SARIMA terbaru**
+- Pengaturan **horizon prediksi (6–36 bulan)**
+- Visualisasi tren harga Bitcoin bulanan
+- Fokus pada **analisis tren jangka menengah**
+
+### Menjalankan Aplikasi (Windows)
+
+1. Siapkan environment:
+```bash
+conda env create -f environments/environment.yml
+conda activate bitcoin-ts-1
+````
+
+2. Jalankan aplikasi:
+
+```bash
+run_streamlit.bat
+```
+
+Aplikasi akan terbuka di browser:
+
+```
+http://localhost:8501
+```
+
+> Catatan: Aplikasi ini ditujukan untuk **analisis arah tren**, bukan prediksi harga harian atau keputusan trading jangka pendek.
+
+---
+
 ## 🔍 Key Findings
 
-- Data Bitcoin bulanan masih menunjukkan **pola musiman tahunan**
-- Model klasik (**SARIMA**) mampu mengungguli model modern (**Prophet**)
-- Prediksi lebih efektif untuk **analisis arah tren**, bukan lonjakan ekstrem
+* Data Bitcoin bulanan masih menunjukkan **pola musiman tahunan**
+* Model klasik (**SARIMA**) mampu mengungguli model modern (**Prophet**)
+* Prediksi lebih efektif untuk **analisis arah tren**, bukan lonjakan ekstrem
 
 ---
 
 ## ⚠️ Limitations
 
-- Model hanya menggunakan data historis harga
-- Tidak mempertimbangkan faktor eksternal (sentimen, regulasi, makroekonomi)
-- Prediksi bersifat halus dan tidak cocok untuk *short-term trading*
-- Parameter model belum dioptimasi menggunakan AutoARIMA
+* Model hanya menggunakan data historis harga
+* Tidak mempertimbangkan faktor eksternal (sentimen, regulasi, makroekonomi)
+* Prediksi bersifat halus dan tidak cocok untuk *short-term trading*
+* Parameter model belum dioptimasi menggunakan AutoARIMA
 
 ---
 
 ## 💡 Recommendations
 
-- Gunakan hasil prediksi sebagai **indikator tren**, bukan harga absolut
-- Tambahkan variabel eksternal untuk meningkatkan akurasi
-- Lakukan optimasi parameter model
-- Eksplor pendekatan **hybrid** (time-series + ML)
-- Sesuaikan horizon prediksi dengan kebutuhan bisnis
+* Gunakan hasil prediksi sebagai **indikator tren**, bukan harga absolut
+* Tambahkan variabel eksternal untuk meningkatkan akurasi
+* Lakukan optimasi parameter model
+* Eksplor pendekatan **hybrid** (time-series + ML)
+* Sesuaikan horizon prediksi dengan kebutuhan bisnis
 
 ---
 
 ## 🛠 Tools & Libraries
 
-- Python (pandas, numpy)
-- statsmodels
-- Prophet
-- scikit-learn
-- Plotly
-- joblib
+* Python (pandas, numpy)
+* statsmodels
+* Prophet
+* scikit-learn
+* Plotly
+* joblib
+* Streamlit
+
+```
