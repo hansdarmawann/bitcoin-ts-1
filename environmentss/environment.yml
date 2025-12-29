@@ -1,0 +1,16 @@
+name: bitcoin-ts-1
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - statsmodels
+  - scikit-learn
+  - plotly
+  - joblib
+  - yfinance
+  - pip
+  - pip:
+      - prophet
+      - streamlit
