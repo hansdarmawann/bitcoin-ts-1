@@ -1,4 +1,4 @@
-# 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting  
+# 📈 Prediksi Harga Bitcoin (BTC) dengan Time-Series Forecasting  
 **by Hans Darmawan**
 
 ## 📁 Project Structure
