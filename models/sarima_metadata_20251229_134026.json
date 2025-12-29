@@ -2,8 +2,8 @@
     "model_name": "SARIMA",
     "model_key": "sarima",
     "model_order": "(1,1,1)(1,1,1,12)",
-    "model_file": "sarima_model_20251229_103640.joblib",
-    "trained_at": "20251229_103640",
+    "model_file": "sarima_model_20251229_134026.joblib",
+    "trained_at": "20251229_134026",
     "train_period": {
         "start": "2014-09-01",
         "end": "2023-12-01"
