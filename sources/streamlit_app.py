@@ -3,7 +3,6 @@ import pandas as pd
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-# Import lokal (aman untuk Streamlit Cloud & local)
 from model_loader import load_latest_model
 
 
@@ -36,7 +35,7 @@ st.success(f"Model berhasil dimuat: `{model_file}`")
 
 
 # =========================
-# Slider Horizon (DITARUH DI BAWAH)
+# Slider Horizon
 # =========================
 st.subheader("🔧 Pengaturan Prediksi")
 
@@ -50,12 +49,11 @@ forecast_horizon = st.slider(
 
 
 # =========================
-# Tentukan tanggal awal forecast (SAFE)
+# Tentukan tanggal awal forecast (AMAN)
 # =========================
 if metadata and "train_period" in metadata and "end" in metadata["train_period"]:
     last_train_date = pd.to_datetime(metadata["train_period"]["end"])
 else:
-    # Fallback aman (Streamlit Cloud / metadata lama)
     last_train_date = pd.to_datetime("today").replace(day=1)
 
 
@@ -72,23 +70,18 @@ forecast_dates = [
 forecast_df = pd.DataFrame({
     "Tanggal": forecast_dates,
     "Harga Prediksi (USD)": forecast_values.values
-})
-
-# Label Month-Year (Jan 26, Feb 26, dst)
-forecast_df["Periode"] = forecast_df["Tanggal"].dt.strftime("%b %y")
-
-# Pastikan urut kronologis
-forecast_df = forecast_df.sort_values("Tanggal").reset_index(drop=True)
+}).sort_values("Tanggal")
 
 
 # =========================
-# Visualisasi
+# Visualisasi (FIX UTAMA)
 # =========================
 st.subheader("📊 Hasil Prediksi")
 
-st.line_chart(
-    data=forecast_df.set_index("Periode")[["Harga Prediksi (USD)"]]
-)
+# ❗ Datetime HARUS jadi index (bukan string)
+chart_df = forecast_df.set_index("Tanggal")[["Harga Prediksi (USD)"]]
+
+st.line_chart(chart_df)
 
 
 # =========================
@@ -96,12 +89,12 @@ st.line_chart(
 # =========================
 st.subheader("ℹ️ Informasi Model")
 
-st.write("**Tipe Model:** SARIMA (auto-selected dari artefak model)")
+st.write("**Tipe Model:** SARIMA (auto-loaded)")
 st.write(f"**Horizon Prediksi:** {forecast_horizon} bulan")
 
 
 # =========================
-# Interpretasi Bisnis
+# Interpretasi
 # =========================
 st.subheader("🧠 Interpretasi")
 
