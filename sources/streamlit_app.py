@@ -60,16 +60,29 @@ st.caption(
 
 
 # =========================================================
-# Proses Prediksi (default 24 bulan)
+# Slider Horizon Prediksi (DITARUH SETELAH HEADER)
 # =========================================================
-FORECAST_HORIZON = 24
+st.subheader("⏱️ Horizon Prediksi")
 
-forecast = model.forecast(steps=FORECAST_HORIZON)
+forecast_horizon = st.slider(
+    "Pilih horizon prediksi (bulan)",
+    min_value=6,
+    max_value=36,
+    value=24,
+    step=6,
+    help="Horizon lebih panjang = tren makin halus, ketidakpastian meningkat"
+)
+
+
+# =========================================================
+# Proses Prediksi
+# =========================================================
+forecast = model.forecast(steps=forecast_horizon)
 
 forecast_df = pd.DataFrame({
     "Bulan": pd.date_range(
         start=pd.Timestamp.today().to_period("M").to_timestamp(),
-        periods=FORECAST_HORIZON,
+        periods=forecast_horizon,
         freq="MS"
     ),
     "Harga Prediksi (USD)": forecast.values
@@ -118,13 +131,12 @@ if metadata:
 st.subheader("🧠 Interpretasi")
 
 st.info(
-    """
-    Prediksi ini menunjukkan **arah tren harga Bitcoin dalam 24 bulan ke depan**.
+    f"""
+    Prediksi ini menunjukkan **arah tren harga Bitcoin untuk {forecast_horizon} bulan ke depan**.
 
     - Model difokuskan pada **tren jangka menengah**, bukan fluktuasi harian.
-    - Lonjakan atau penurunan ekstrem **tidak sepenuhnya tertangkap** oleh model.
-    - Cocok digunakan untuk **analisis strategis dan pengambilan keputusan jangka menengah**,
-      bukan untuk trading harian.
+    - Horizon lebih panjang menghasilkan tren lebih halus, namun ketidakpastian meningkat.
+    - Tidak disarankan untuk **short-term trading**.
     """
 )
 
