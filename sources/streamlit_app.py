@@ -1,21 +1,26 @@
-import os
+# =========================================================
+# Streamlit App - Bitcoin (BTC) Monthly Price Forecast
+# =========================================================
+
+# --- Fix import path for Streamlit Cloud ---
 import sys
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.append(str(ROOT_DIR))
+
+# --- Standard imports ---
 import streamlit as st
 import pandas as pd
 
-# =====================================================
-# Setup project root & import path
-# =====================================================
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
-
+# --- Local module import ---
 from sources.model_loader import load_latest_model
 
-# =========================
+
+# =========================================================
 # Konfigurasi Halaman
-# =========================
+# =========================================================
 st.set_page_config(
     page_title="Prediksi Harga Bitcoin",
     page_icon="📈",
@@ -28,94 +33,91 @@ st.caption(
     "Fokus pada tren jangka menengah, bukan volatilitas jangka pendek"
 )
 
-# =========================
+
+# =========================================================
 # Load Model Terbaru
-# =========================
+# =========================================================
 with st.spinner("Memuat model terbaru..."):
     model, metadata, model_file = load_latest_model(
-        model_dir=os.path.join(PROJECT_ROOT, "models"),
+        model_dir="models",
         model_key="sarima"
     )
 
 st.success(f"Model berhasil dimuat: `{model_file}`")
 
-# =========================
-# Tentukan tanggal awal forecast
-# =========================
-if metadata and "train_period" in metadata:
-    last_train_date = pd.to_datetime(metadata["train_period"]["end"])
-else:
-    last_train_date = pd.Timestamp.today()
 
-# =========================
-# Slider Horizon (KONTROL UTAMA)
-# =========================
-st.subheader("📊 Hasil Prediksi")
+# =========================================================
+# Proses Prediksi (default 24 bulan)
+# =========================================================
+FORECAST_HORIZON = 24
 
-forecast_horizon = st.slider(
-    "⏳ Horizon Prediksi (bulan ke depan)",
-    min_value=6,
-    max_value=36,
-    value=24,
-    step=6
-)
-
-# =========================
-# Generate Forecast
-# =========================
-forecast_index = pd.date_range(
-    start=last_train_date + pd.offsets.MonthBegin(1),
-    periods=forecast_horizon,
-    freq="MS"
-)
-
-forecast = model.forecast(steps=forecast_horizon)
+forecast = model.forecast(steps=FORECAST_HORIZON)
 
 forecast_df = pd.DataFrame({
-    "Tanggal": forecast_index,
+    "Bulan": pd.date_range(
+        start=pd.Timestamp.today().to_period("M").to_timestamp(),
+        periods=FORECAST_HORIZON,
+        freq="MS"
+    ),
     "Harga Prediksi (USD)": forecast.values
 })
 
-# =========================
-# Visualisasi (SATU KALI)
-# =========================
+
+# =========================================================
+# Visualisasi
+# =========================================================
+st.subheader("📊 Hasil Prediksi Harga Bitcoin")
+
 st.line_chart(
-    forecast_df.set_index("Tanggal")
+    forecast_df.set_index("Bulan")
 )
 
-# =========================
-# Informasi Model (TANPA RMSE)
-# =========================
+
+# =========================================================
+# Informasi Model (tanpa RMSE)
+# =========================================================
 st.subheader("ℹ️ Informasi Model")
 
-st.markdown("**Tipe Model**")
-st.write("SARIMA (1,1,1)(1,1,1,12)")
+st.markdown(
+    """
+    **Model**  
+    SARIMA (1,1,1)(1,1,1,12)
 
-if metadata and "train_period" in metadata:
+    **Frekuensi Data**  
+    Bulanan (Monthly Average Close Price)
+
+    **Tujuan Model**  
+    Analisis tren harga Bitcoin jangka menengah
+    """
+)
+
+if metadata:
     st.markdown("**Periode Data Latih**")
     st.write(
         f"{metadata['train_period']['start']} "
         f"sampai {metadata['train_period']['end']}"
     )
 
-# =========================
+
+# =========================================================
 # Interpretasi Bisnis
-# =========================
+# =========================================================
 st.subheader("🧠 Interpretasi")
 
 st.info(
-    f"""
-    Prediksi ini menunjukkan **arah tren harga Bitcoin** untuk periode  
-    **{forecast_df['Tanggal'].iloc[0].strftime('%B %Y')} sampai {forecast_df['Tanggal'].iloc[-1].strftime('%B %Y')}**.
-    
-    - Model difokuskan untuk menangkap **tren jangka menengah**, bukan fluktuasi harga harian.
-    - Lonjakan atau penurunan harga ekstrem **tidak sepenuhnya tertangkap** oleh model SARIMA.
-    - Hasil prediksi lebih sesuai digunakan untuk **analisis strategis**, bukan keputusan trading jangka pendek.
+    """
+    Prediksi ini menunjukkan **arah tren harga Bitcoin dalam 24 bulan ke depan**.
+
+    - Model difokuskan pada **tren jangka menengah**, bukan fluktuasi harian.
+    - Lonjakan atau penurunan ekstrem **tidak sepenuhnya tertangkap** oleh SARIMA.
+    - Cocok digunakan untuk **analisis strategis dan pengambilan keputusan jangka menengah**,
+      bukan untuk trading harian.
     """
 )
 
-# =========================
+
+# =========================================================
 # Footer
-# =========================
+# =========================================================
 st.markdown("---")
-st.caption("Dikembangkan oleh Hans Darmawan • Proyek Time-Series Forecasting")
+st.caption("Dikembangkan oleh Hans Darmawan • Proyek Time-Series Forecasting Bitcoin")
