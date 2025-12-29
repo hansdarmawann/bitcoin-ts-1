@@ -109,8 +109,10 @@ Model **SARIMA** memberikan performa terbaik dan dipilih sebagai **model final**
   - reusable di notebook, Streamlit, atau API
 
 ## 🚀 Streamlit App (Demo)
-Proyek ini menyediakan **aplikasi Streamlit** untuk menampilkan hasil prediksi secara interaktif. 
+Proyek ini menyediakan **aplikasi Streamlit** untuk menampilkan hasil prediksi secara interaktif.
+
 Bisa langsung diakses di sini: 
+
 https://bitcoin-ts-1.streamlit.app/
 
 ### Fitur Utama
