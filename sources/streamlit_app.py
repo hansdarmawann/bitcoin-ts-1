@@ -28,10 +28,6 @@ st.set_page_config(
 )
 
 st.title("📈 Prediksi Harga Bitcoin (BTC) Bulanan")
-st.caption(
-    "Time-Series Forecasting menggunakan SARIMA | "
-    "Fokus pada tren jangka menengah, bukan volatilitas jangka pendek"
-)
 
 
 # =========================================================
@@ -44,6 +40,23 @@ with st.spinner("Memuat model terbaru..."):
     )
 
 st.success(f"Model berhasil dimuat: `{model_file}`")
+
+
+# =========================================================
+# Dynamic Model Label (BERBASIS METADATA)
+# =========================================================
+model_name = "Time-Series Model"
+model_detail = ""
+
+if metadata:
+    model_name = metadata.get("model_name", model_name)
+    model_detail = metadata.get("model_order", "")
+
+st.caption(
+    f"Time-Series Forecasting menggunakan {model_name}"
+    + (f" {model_detail}" if model_detail else "")
+    + " | Fokus pada tren jangka menengah, bukan volatilitas jangka pendek"
+)
 
 
 # =========================================================
@@ -74,14 +87,14 @@ st.line_chart(
 
 
 # =========================================================
-# Informasi Model (tanpa RMSE)
+# Informasi Model
 # =========================================================
 st.subheader("ℹ️ Informasi Model")
 
 st.markdown(
-    """
+    f"""
     **Model**  
-    SARIMA (1,1,1)(1,1,1,12)
+    {model_name} {model_detail}
 
     **Frekuensi Data**  
     Bulanan (Monthly Average Close Price)
@@ -109,7 +122,7 @@ st.info(
     Prediksi ini menunjukkan **arah tren harga Bitcoin dalam 24 bulan ke depan**.
 
     - Model difokuskan pada **tren jangka menengah**, bukan fluktuasi harian.
-    - Lonjakan atau penurunan ekstrem **tidak sepenuhnya tertangkap** oleh SARIMA.
+    - Lonjakan atau penurunan ekstrem **tidak sepenuhnya tertangkap** oleh model.
     - Cocok digunakan untuk **analisis strategis dan pengambilan keputusan jangka menengah**,
       bukan untuk trading harian.
     """
