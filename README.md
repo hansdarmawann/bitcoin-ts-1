@@ -1,4 +1,3 @@
-````md
 # 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting
 **by Hans Darmawan**
 
@@ -182,5 +181,3 @@ http://localhost:8501
 * Plotly
 * joblib
 * Streamlit
-
-```
