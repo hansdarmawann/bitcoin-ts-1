@@ -1,0 +1,19 @@
+{
+    "model_name": "SARIMA",
+    "model_key": "sarima",
+    "model_order": "(1,1,1)(1,1,1,12)",
+    "model_file": "sarima_model_20251229_103640.joblib",
+    "trained_at": "20251229_103640",
+    "train_period": {
+        "start": "2014-09-01",
+        "end": "2023-12-01"
+    },
+    "test_period": {
+        "start": "2024-01-01",
+        "end": "2025-12-01"
+    },
+    "evaluation_metric": "RMSE",
+    "rmse": 36057.038512533945,
+    "data_frequency": "Monthly",
+    "target_variable": "Bitcoin Close Price (USD)"
+}
