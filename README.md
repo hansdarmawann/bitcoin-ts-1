@@ -70,9 +70,9 @@ Evaluasi dilakukan menggunakan **RMSE (Root Mean Squared Error)**.
 
 | Model   | RMSE (USD) |
 |--------|------------|
-| SARIMA | ~36,071 |
-| ARIMA | ~44,035 |
-| Prophet | ~47,793 |
+| SARIMA | ~36.057 |
+| ARIMA | ~44.018 |
+| Prophet | ~47.777 |
 
 Model **SARIMA** menunjukkan performa terbaik dan dipilih sebagai model final.
 
