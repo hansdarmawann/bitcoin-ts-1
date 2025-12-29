@@ -115,32 +115,15 @@ Model **SARIMA** memberikan performa terbaik dan dipilih sebagai **model final**
 ---
 
 ## 🚀 Streamlit App (Demo)
-
-Proyek ini menyediakan **aplikasi Streamlit** untuk menampilkan hasil prediksi secara interaktif.
+Proyek ini menyediakan **aplikasi Streamlit** untuk menampilkan hasil prediksi secara interaktif. 
+Bisa langsung diakses di sini: 
+https://bitcoin-ts-1.streamlit.app/
 
 ### Fitur Utama
 - Auto-load **model SARIMA terbaru**
 - Pengaturan **horizon prediksi (6–36 bulan)**
 - Visualisasi tren harga Bitcoin bulanan
 - Fokus pada **analisis tren jangka menengah**
-
-### Menjalankan Aplikasi (Windows)
-
-```bash
-conda env create -f environments/environment.yml
-conda activate bitcoin-ts-1
-run_streamlit.bat
-````
-
-Aplikasi akan berjalan di:
-
-```
-http://localhost:8501
-```
-
-> Catatan: Aplikasi ini ditujukan untuk **analisis arah tren**, bukan prediksi harga harian atau keputusan trading jangka pendek.
-
----
 
 ## 🔍 Key Findings
 
