@@ -1,57 +1,33 @@
-# 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting
-**by Hans Darmawan**
-
----
-
-## 📁 Folder Description
-
-| Path | Description |
-|-----|------------|
-| `.gitignore` | Konfigurasi file dan folder yang dikecualikan dari Git |
-| `README.md` | Dokumentasi utama proyek |
-| `lst.txt` | Catatan / log internal |
-| `datasets/` | Dataset harga Bitcoin |
-| `datasets/btc_2014_2025.csv` | Data harian Bitcoin (OHLCV) dari Yahoo Finance |
-| `environments/` | Konfigurasi environment |
-| `environments/environment.yml` | File Conda environment untuk replikasi setup |
-| `models/` | Artefak model terlatih |
-| `models/sarima_model_YYYYMMDD_HHMMSS.joblib` | Model SARIMA terlatih (versioned) |
-| `models/sarima_metadata_YYYYMMDD_HHMMSS.json` | Metadata model (periode training, dsb.) |
-| `notebooks/` | Jupyter Notebook untuk analisis dan modeling |
-| `notebooks/notebook.ipynb` | Notebook utama (EDA, modeling, evaluasi, visualisasi) |
-| `sources/` | Script Python reusable |
-| `sources/get_data.py` | Script pengambilan dan persiapan data |
-| `sources/model_loader.py` | Loader model (Level 2: auto-load model + metadata) |
-| `sources/streamlit_app.py` | Aplikasi Streamlit untuk visualisasi prediksi |
-| `sources/clean_cache.py` | Utility untuk membersihkan cache Python |
-| `run_streamlit.bat` | Script Windows untuk menjalankan Streamlit app |
+# 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting  
+**Author: Hans Darmawan**
 
 ---
 
 ## 📌 Overview
 
-Proyek ini bertujuan untuk memprediksi **harga Bitcoin bulanan** menggunakan pendekatan *time-series forecasting*. Fokus utama proyek adalah mengevaluasi efektivitas model klasik dan modern dalam menangani data dengan **volatilitas tinggi**, seperti Bitcoin.
+Proyek ini bertujuan untuk memprediksi **harga Bitcoin bulanan** menggunakan pendekatan *time-series forecasting*. Fokus utama proyek adalah mengevaluasi seberapa efektif model *time-series* dalam menangani **aset dengan volatilitas tinggi**, seperti Bitcoin.
 
-Pendekatan yang digunakan mengikuti kerangka kerja **Microsoft Team Data Science Process (TDSP)**, mulai dari pemahaman bisnis hingga evaluasi dan kesiapan deployment.
+Proyek ini dibangun secara **end-to-end**, mulai dari eksplorasi data, pemodelan, evaluasi, hingga kesiapan deployment ringan melalui **Streamlit**.  
+Pendekatan kerja mengikuti kerangka **Microsoft Team Data Science Process (TDSP)**.
 
 ---
 
 ## 💼 Business Problem
 
-Bitcoin memiliki pergerakan harga yang sangat fluktuatif dan dipengaruhi oleh berbagai faktor eksternal. Stakeholder ingin mengetahui:
+Bitcoin memiliki karakteristik harga yang sangat fluktuatif dan dipengaruhi oleh banyak faktor eksternal. Stakeholder ingin memahami:
 
-- Apakah data historis harga Bitcoin dapat digunakan untuk memprediksi harga di masa depan?
-- Model *time-series* mana yang paling efektif untuk menangkap tren harga Bitcoin bulanan?
+- Apakah data historis harga Bitcoin cukup informatif untuk memprediksi harga di masa depan?
+- Model *time-series* mana yang paling efektif untuk menangkap **tren harga bulanan** Bitcoin?
 - Seberapa besar tingkat kesalahan prediksi yang dihasilkan oleh masing-masing model?
 
 ---
 
 ## 🎯 Objectives
 
-- Mengubah data harga Bitcoin harian menjadi data **bulanan** untuk mengurangi *noise*
+- Mengubah data harga Bitcoin **harian → bulanan** untuk mengurangi *noise*
 - Memprediksi harga Bitcoin untuk **24 bulan ke depan**
 - Membandingkan performa beberapa model *time-series*
-- Menentukan model terbaik berdasarkan metrik evaluasi kuantitatif
+- Menentukan model terbaik berdasarkan evaluasi kuantitatif
 
 ---
 
@@ -62,17 +38,20 @@ Bitcoin memiliki pergerakan harga yang sangat fluktuatif dan dipengaruhi oleh be
 - **Initial Frequency**: Daily (OHLCV)  
 - **Target Variable**: `close` (harga penutupan)
 
-Data harian di-*resample* menjadi **rata-rata bulanan** untuk meningkatkan stabilitas model dan memudahkan analisis tren jangka menengah.
+Data harian di-*resample* menjadi **rata-rata bulanan** untuk:
+- mengurangi fluktuasi ekstrem
+- meningkatkan stabilitas model
+- mempermudah analisis tren jangka menengah
 
 ---
 
 ## 🧠 Methodology (TDSP)
 
 ### 1. Business Understanding
-Memahami karakteristik Bitcoin sebagai aset dengan volatilitas tinggi dan menentukan tujuan prediksi berbasis kebutuhan bisnis.
+Memahami karakteristik Bitcoin sebagai aset berisiko tinggi dan menentukan tujuan prediksi berbasis kebutuhan analisis tren.
 
 ### 2. Data Acquisition & Understanding
-- Validasi dataset (tidak ada missing value dan duplikasi)
+- Validasi data (tidak ada *missing value* dan duplikasi)
 - Resampling data harian ke bulanan
 - Visualisasi tren harga Bitcoin
 - Uji stasioneritas menggunakan **ADF Test**
@@ -80,40 +59,40 @@ Memahami karakteristik Bitcoin sebagai aset dengan volatilitas tinggi dan menent
 ### 3. Modeling
 
 **Train–Test Split**
-- Training set: September 2014 – Desember 2023  
-- Test set: Januari 2024 – Desember 2025  
+- Training: September 2014 – Desember 2023  
+- Testing: Januari 2024 – Desember 2025  
 
-**Models**
+**Model yang digunakan**
 - **ARIMA (1,1,1)** – baseline
 - **SARIMA (1,1,1)(1,1,1,12)** – menangkap pola musiman tahunan
 - **Prophet** – tren non-linear dan *changepoints*
 
 ### 4. Evaluation
 
-Evaluasi menggunakan **RMSE (Root Mean Squared Error)**.
+Evaluasi dilakukan menggunakan **RMSE (Root Mean Squared Error)**.
 
 | Model   | RMSE (USD) |
 |--------|------------|
 | SARIMA | ~36,057 |
-| ARIMA | ~44,018 |
-| Prophet | ~47,777 |
+| ARIMA  | ~44,018 |
+| Prophet| ~47,777 |
 
-Model **SARIMA** menunjukkan performa terbaik dan dipilih sebagai **model final**.
+Model **SARIMA** memberikan performa terbaik dan dipilih sebagai **model final**.
 
 ### 5. Deployment Readiness
 
 - Model disimpan sebagai artefak menggunakan **joblib**
-- Metadata disimpan dalam format JSON
-- Model loader Level 2 memungkinkan:
-  - Auto-load model terbaru
-  - Auto-load metadata yang sesuai
-  - Reusability di notebook, Streamlit, atau API
+- Metadata model disimpan dalam format JSON
+- Disediakan **Model Loader (Level 2)** untuk:
+  - auto-load model terbaru
+  - auto-load metadata yang sesuai
+  - reusable di notebook, Streamlit, atau API
 
 ---
 
 ## 🚀 Streamlit App (Demo)
 
-Proyek ini dilengkapi dengan **aplikasi Streamlit** untuk menampilkan hasil prediksi harga Bitcoin secara interaktif.
+Proyek ini menyediakan **aplikasi Streamlit** untuk menampilkan hasil prediksi secara interaktif.
 
 ### Fitur Utama
 - Auto-load **model SARIMA terbaru**
@@ -123,19 +102,13 @@ Proyek ini dilengkapi dengan **aplikasi Streamlit** untuk menampilkan hasil pred
 
 ### Menjalankan Aplikasi (Windows)
 
-1. Siapkan environment:
 ```bash
 conda env create -f environments/environment.yml
 conda activate bitcoin-ts-1
+run_streamlit.bat
 ````
 
-2. Jalankan aplikasi:
-
-```bash
-run_streamlit.bat
-```
-
-Aplikasi akan terbuka di browser:
+Aplikasi akan berjalan di:
 
 ```
 http://localhost:8501
@@ -149,7 +122,7 @@ http://localhost:8501
 
 * Data Bitcoin bulanan masih menunjukkan **pola musiman tahunan**
 * Model klasik (**SARIMA**) mampu mengungguli model modern (**Prophet**)
-* Prediksi lebih efektif untuk **analisis arah tren**, bukan lonjakan ekstrem
+* Prediksi lebih cocok digunakan sebagai **indikator arah tren**, bukan nilai harga absolut
 
 ---
 
@@ -157,18 +130,42 @@ http://localhost:8501
 
 * Model hanya menggunakan data historis harga
 * Tidak mempertimbangkan faktor eksternal (sentimen, regulasi, makroekonomi)
-* Prediksi bersifat halus dan tidak cocok untuk *short-term trading*
+* Prediksi bersifat halus dan kurang cocok untuk *short-term trading*
 * Parameter model belum dioptimasi menggunakan AutoARIMA
 
 ---
 
 ## 💡 Recommendations
 
-* Gunakan hasil prediksi sebagai **indikator tren**, bukan harga absolut
+* Gunakan hasil prediksi sebagai **indikator tren**
 * Tambahkan variabel eksternal untuk meningkatkan akurasi
 * Lakukan optimasi parameter model
 * Eksplor pendekatan **hybrid** (time-series + ML)
 * Sesuaikan horizon prediksi dengan kebutuhan bisnis
+
+---
+
+## 📁 Project Structure
+
+```
+bitcoin-ts-1/
+├─ datasets/
+│  └─ btc_2014_2025.csv
+├─ environments/
+│  └─ environment.yml
+├─ models/
+│  ├─ sarima_model_YYYYMMDD_HHMMSS.joblib
+│  └─ sarima_metadata_YYYYMMDD_HHMMSS.json
+├─ notebooks/
+│  └─ notebook.ipynb
+├─ sources/
+│  ├─ get_data.py
+│  ├─ model_loader.py
+│  ├─ streamlit_app.py
+│  └─ clean_cache.py
+├─ run_streamlit.bat
+└─ README.md
+```
 
 ---
 
