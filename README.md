@@ -1,9 +1,3 @@
-Siap 👍
-Di bawah ini adalah **versi `README.md` yang sudah di-update penuh**, **konsisten dengan struktur project terbaru**, dan **siap portfolio / reviewer**.
-Kamu bisa **langsung replace isi `README.md`** dengan konten ini.
-
----
-
 ````md
 # 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting
 **by Hans Darmawan**
