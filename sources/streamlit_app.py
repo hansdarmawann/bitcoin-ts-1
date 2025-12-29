@@ -1,10 +1,14 @@
 import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
-from sources.model_loader import load_latest_model
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+# ✅ Local import (SAFE for Streamlit Cloud)
+from model_loader import load_latest_model
+
 
 # =========================
-# Konfigurasi Halaman
+# Page Configuration
 # =========================
 st.set_page_config(
     page_title="Prediksi Harga Bitcoin",
@@ -13,13 +17,10 @@ st.set_page_config(
 )
 
 st.title("📈 Prediksi Harga Bitcoin (BTC) Bulanan")
-st.caption(
-    "Time-Series Forecasting menggunakan SARIMA | "
-    "Fokus pada tren jangka menengah, bukan volatilitas jangka pendek"
-)
+
 
 # =========================
-# Load Model
+# Load Latest Model
 # =========================
 with st.spinner("Memuat model terbaru..."):
     model, metadata, model_file = load_latest_model(
@@ -27,78 +28,88 @@ with st.spinner("Memuat model terbaru..."):
         model_key="sarima"
     )
 
-st.success(f"Model dimuat: `{model_file}`")
+st.success(f"Model berhasil dimuat: `{model_file}`")
+
 
 # =========================
-# Slider Horizon (DI BAWAH)
+# Model Info (Dynamic)
 # =========================
+model_name = metadata.get("model_name", "SARIMA") if metadata else "SARIMA"
+model_order = metadata.get("order") if metadata else None
+seasonal_order = metadata.get("seasonal_order") if metadata else None
+
+model_desc = model_name
+if model_order and seasonal_order:
+    model_desc += f" {model_order}{seasonal_order}"
+
+st.caption(
+    f"Time-Series Forecasting menggunakan **{model_desc}** | "
+    "Fokus pada tren jangka menengah, bukan volatilitas jangka pendek"
+)
+
+
+# =========================
+# Forecast Horizon Slider
+# =========================
+st.subheader("🔧 Pengaturan Prediksi")
+
 forecast_horizon = st.slider(
     "Horizon Prediksi (bulan)",
     min_value=6,
     max_value=36,
-    step=6,
-    value=6
+    value=6,
+    step=6
 )
 
+
 # =========================
-# Forecast
+# Generate Forecast
 # =========================
 forecast = model.forecast(steps=forecast_horizon)
 
-# Buat datetime index (BULANAN)
-last_date = model.data.dates[-1]
-forecast_index = pd.date_range(
-    start=last_date + pd.offsets.MonthBegin(1),
-    periods=forecast_horizon,
-    freq="MS"
-)
+# Tentukan start date (bulan setelah data terakhir)
+last_train_date = pd.to_datetime(metadata["train_period"]["end"])
+dates = [
+    last_train_date + relativedelta(months=i)
+    for i in range(1, forecast_horizon + 1)
+]
 
-forecast_df = pd.DataFrame(
-    {"Predicted Price (USD)": forecast},
-    index=forecast_index
-)
+forecast_df = pd.DataFrame({
+    "date": dates,
+    "Predicted Price (USD)": forecast.values
+})
 
-# =========================
-# Plot (DATETIME, BUKAN STRING)
-# =========================
-fig = go.Figure()
+# ✅ Month-Year label (chronological)
+forecast_df["Month-Year"] = forecast_df["date"].dt.strftime("%b %y")
+forecast_df = forecast_df.sort_values("date").set_index("Month-Year")
 
-fig.add_trace(
-    go.Scatter(
-        x=forecast_df.index,        # ⬅ datetime index
-        y=forecast_df.iloc[:, 0],
-        mode="lines+markers",
-        name="Prediksi Harga BTC"
-    )
-)
-
-fig.update_layout(
-    title="Prediksi Tren Harga Bitcoin",
-    xaxis_title="Month – Year",
-    yaxis_title="Harga (USD)",
-    template="plotly_white",
-    hovermode="x unified",
-    xaxis=dict(
-        type="date",                # ⬅ penting
-        tickformat="%b %y"          # Jan 26
-    )
-)
-
-st.plotly_chart(fig, use_container_width=True)
 
 # =========================
-# Interpretasi
+# Visualization
+# =========================
+st.subheader("📊 Hasil Prediksi Harga Bitcoin")
+
+st.line_chart(forecast_df[["Predicted Price (USD)"]])
+
+
+# =========================
+# Business Interpretation
 # =========================
 st.subheader("🧠 Interpretasi")
+
 st.info(
     f"""
     Prediksi ini menunjukkan **arah tren harga Bitcoin untuk {forecast_horizon} bulan ke depan**.
 
-    • Model difokuskan pada **tren jangka menengah**, bukan fluktuasi harian  
-    • Horizon lebih panjang → tren lebih halus, ketidakpastian meningkat  
-    • **Tidak disarankan untuk short-term trading**
+    - Model difokuskan pada **tren jangka menengah**, bukan fluktuasi harian
+    - Horizon lebih panjang menghasilkan **tren lebih halus**, namun ketidakpastian meningkat
+    - **Tidak disarankan untuk short-term trading**
     """
 )
 
+
+# =========================
+# Footer
+# =========================
 st.markdown("---")
-st.caption("Dikembangkan oleh Hans Darmawan • Time-Series Forecasting Project")
+st.caption("Dikembangkan oleh Hans Darmawan • Proyek Time-Series Forecasting Bitcoin")
