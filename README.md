@@ -1,5 +1,5 @@
 # 📈 Bitcoin (BTC) Price Prediction using Time-Series Forecasting  
-**Author: Hans Darmawan**
+**by Hans Darmawan**
 
 ---
 
