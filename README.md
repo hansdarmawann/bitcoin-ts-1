@@ -5,22 +5,30 @@
 
 ```
 bitcoin-ts-1/
-├─ datasets/
-│  └─ btc_2014_2025.csv
-├─ environments/
-│  └─ environment.yml
-├─ models/
-│  ├─ sarima_model_YYYYMMDD_HHMMSS.joblib
-│  └─ sarima_metadata_YYYYMMDD_HHMMSS.json
-├─ notebooks/
-│  └─ notebook.ipynb
-├─ sources/
-│  ├─ get_data.py
-│  ├─ model_loader.py
-│  ├─ streamlit_app.py
-│  └─ clean_cache.py
-├─ run_streamlit.bat
-└─ README.md
+├─ datasets/                     # Dataset input
+│  └─ btc_2014_2025.csv           # Data historis Bitcoin (Daily OHLCV)
+│
+├─ environments/                 # Environment reproducibility
+│  └─ environment.yml            # Conda environment (local development)
+│
+├─ models/                       # Trained model artifacts
+│  ├─ sarima_model_YYYYMMDD_HHMMSS.joblib     # Serialized SARIMA model
+│  └─ sarima_metadata_YYYYMMDD_HHMMSS.json    # Model metadata (training period, metrics)
+│
+├─ notebooks/                    # Research & experimentation
+│  └─ notebook.ipynb             # EDA, modeling, evaluation (TDSP workflow)
+│
+├─ sources/                      # Reusable application code
+│  ├─ get_data.py                # Data fetching & preprocessing
+│  ├─ model_loader.py            # Auto-load latest model + metadata
+│  ├─ streamlit_app.py           # Streamlit dashboard (visualization & inference)
+│  ├─ clean_cache.py             # Utility: clean Python cache
+│  └─ __init__.py
+│
+├─ requirements.txt              # Minimal dependencies for Streamlit Cloud
+├─ run_streamlit.bat             # Local Streamlit launcher (Windows)
+├─ README.md                     # Project documentation
+└─ .gitignore                    # Git ignore rules
 ```
 
 ## 📌 Overview
