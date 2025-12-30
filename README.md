@@ -33,7 +33,7 @@ bitcoin-ts-1/
 
 ## 📌 Overview
 
-Proyek ini bertujuan untuk memprediksi **harga Bitcoin bulanan** menggunakan pendekatan *time-series forecasting*. Fokus utama proyek adalah mengevaluasi seberapa efektif model *time-series- dalam menangani **aset dengan volatilitas tinggi**, seperti Bitcoin.
+Proyek ini bertujuan untuk memprediksi **harga Bitcoin bulanan** menggunakan pendekatan *time-series forecasting*. Fokus utama proyek adalah mengevaluasi seberapa efektif model *time-series* dalam menangani **aset dengan volatilitas tinggi**, seperti Bitcoin.
 
 Proyek ini dibangun secara **end-to-end**, mulai dari eksplorasi data, pemodelan, evaluasi, hingga kesiapan deployment ringan melalui **Streamlit**.  
 Pendekatan kerja mengikuti kerangka **Microsoft Team Data Science Process (TDSP)**.
@@ -60,7 +60,7 @@ Bitcoin memiliki karakteristik harga yang sangat fluktuatif dan dipengaruhi oleh
 - **Initial Frequency**: Daily (OHLCV)  
 - **Target Variable**: `close` (harga penutupan)
 
-Data harian di-*resample- menjadi **rata-rata bulanan** untuk:
+Data harian di-*resample* menjadi **rata-rata bulanan** untuk:
 - mengurangi fluktuasi ekstrem
 - meningkatkan stabilitas model
 - mempermudah analisis tren jangka menengah
